@@ -1,0 +1,45 @@
+[25-Apr-2025 08:07:02 Europe/Berlin] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'panel'@'localhost' (using password: YES) in C:\xampp\htdocs\latam-actual\bancos\cjs\config.php on line 18
+[25-Apr-2025 08:07:31 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli object is already closed in C:\xampp\htdocs\latam-actual\bancos\cjs\panel_u2.php:25
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\latam-actual\bancos\cjs\panel_u2.php on line 25
+[25-Apr-2025 08:10:25 Europe/Berlin] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: YES) in C:\xampp\htdocs\latam-actual\bancos\cjs\config.php on line 18
+[25-Apr-2025 08:10:34 Europe/Berlin] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: YES) in C:\xampp\htdocs\latam-actual\bancos\cjs\config.php on line 18
+[25-Apr-2025 08:10:45 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli object is already closed in C:\xampp\htdocs\latam-actual\bancos\cjs\panel_u2.php:25
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\latam-actual\bancos\cjs\panel_u2.php on line 25
+[25-Apr-2025 08:11:14 Europe/Berlin] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'admin'@'localhost' (using password: YES) in C:\xampp\htdocs\latam-actual\bancos\cjs\config.php on line 18
+[25-Apr-2025 08:11:18 Europe/Berlin] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'admin'@'localhost' (using password: NO) in C:\xampp\htdocs\latam-actual\bancos\cjs\config.php on line 18
+[25-Apr-2025 08:11:24 Europe/Berlin] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: YES) in C:\xampp\htdocs\latam-actual\bancos\cjs\config.php on line 18
+[25-Apr-2025 08:11:29 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli object is already closed in C:\xampp\htdocs\latam-actual\bancos\cjs\panel_u2.php:25
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\latam-actual\bancos\cjs\panel_u2.php on line 25
+[25-Apr-2025 08:15:10 Europe/Berlin] PHP Fatal error:  Uncaught Error: mysqli object is already closed in C:\xampp\htdocs\latam-actual\bancos\cjs\panel_u2.php:25
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\latam-actual\bancos\cjs\panel_u2.php on line 25
+[25-Apr-2025 08:22:26 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on bool in C:\xampp\htdocs\latam-actual\bancos\cjs\formulario_u1.php:14
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\latam-actual\bancos\cjs\formulario_u1.php on line 14
+[25-Apr-2025 08:25:55 Europe/Berlin] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'admin'@'localhost' (using password: YES) in C:\xampp\htdocs\latam-actual\bancos\cjs\config.php on line 18
+[25-Apr-2025 08:26:06 Europe/Berlin] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'admin'@'localhost' (using password: YES) in C:\xampp\htdocs\latam-actual\bancos\cjs\config.php on line 18
+[25-Apr-2025 08:27:06 Europe/Berlin] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'admin'@'localhost' (using password: YES) in C:\xampp\htdocs\latam-actual\bancos\cjs\config.php on line 18
+[25-Apr-2025 08:27:27 Europe/Berlin] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'admin'@'localhost' (using password: YES) in C:\xampp\htdocs\latam-actual\bancos\cjs\config.php on line 18
+[25-Apr-2025 08:27:34 Europe/Berlin] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'admin'@'localhost' (using password: NO) in C:\xampp\htdocs\latam-actual\bancos\cjs\config.php on line 18
+[25-Apr-2025 08:27:41 Europe/Berlin] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'admin'@'localhost' (using password: NO) in C:\xampp\htdocs\latam-actual\bancos\cjs\config.php on line 18
+[25-Apr-2025 08:28:06 Europe/Berlin] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'admin'@'localhost' (using password: NO) in C:\xampp\htdocs\latam-actual\bancos\cjs\config.php on line 18
+[25-Apr-2025 08:29:08 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on bool in C:\xampp\htdocs\latam-actual\bancos\cjs\formulario_u1.php:14
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\latam-actual\bancos\cjs\formulario_u1.php on line 14
+[25-Apr-2025 08:31:06 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on bool in C:\xampp\htdocs\latam-actual\bancos\cjs\formulario_u1.php:14
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\latam-actual\bancos\cjs\formulario_u1.php on line 14
+[25-Apr-2025 08:32:37 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on bool in C:\xampp\htdocs\latam-actual\bancos\cjs\formulario_u1.php:14
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\latam-actual\bancos\cjs\formulario_u1.php on line 14
