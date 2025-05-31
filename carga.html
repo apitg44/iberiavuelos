@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iberia - Servicio de Comida a Bordo</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body, html {
+            height: 100%;
+            font-family: 'Open Sans', Arial, sans-serif;
+            overflow: hidden;
+        }
+        
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: #1a2847;
+        }
+        
+        /* IMAGEN DE FONDO - Reemplazar aquí */
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('img/disponibilidad_default_2000.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.25);
+        }
+        
+        /* TEXTO SUPERIOR */
+        .header-text {
+            position: absolute;
+            top: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: white;
+            z-index: 10;
+            max-width: 600px;
+        }
+        
+        .header-text h1 {
+            font-size: 32px;
+            font-weight: 300;
+            line-height: 1.2;
+            letter-spacing: 0.3px;
+        }
+        
+        .madrid {
+            font-weight: 600;
+        }
+        
+        /* TARJETA PRINCIPAL */
+        .main-card {
+            position: absolute;
+            top: 220px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 320px;
+            background: white;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+            z-index: 10;
+        }
+        
+        /* IMAGEN DEL CENTRO - Reemplazar aquí */
+        .food-image {
+            width: 100%;
+            height: 160px;
+            background-image: url('img/5352566.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        /* CONTENIDO DE LA TARJETA */
+        .card-content {
+            background: rgba(80, 80, 80, 0.95);
+            padding: 24px 22px;
+            color: white;
+        }
+        
+        .card-title {
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 1.3;
+            margin-bottom: 16px;
+            color: white;
+        }
+        
+        .card-text {
+            font-size: 14px;
+            line-height: 1.4;
+            color: #e5e5e5;
+            font-weight: 400;
+        }
+        
+        .highlight {
+            color: white;
+            font-weight: 500;
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header-text {
+                top: 50px;
+                padding: 0 20px;
+            }
+            
+            .header-text h1 {
+                font-size: 22px;
+                line-height: 1.3;
+            }
+            
+            .main-card {
+                width: 280px;
+                top: 200px;
+            }
+            
+            .food-image {
+                height: 140px;
+            }
+            
+            .card-content {
+                padding: 20px 18px;
+            }
+            
+            .card-title {
+                font-size: 18px;
+                margin-bottom: 14px;
+            }
+            
+            .card-text {
+                font-size: 13px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header-text {
+                top: 40px;
+                padding: 0 15px;
+            }
+            
+            .header-text h1 {
+                font-size: 20px;
+                line-height: 1.4;
+            }
+            
+            .main-card {
+                top: 180px;
+                width: 260px;
+            }
+            
+            .food-image {
+                height: 120px;
+            }
+            
+            .card-content {
+                padding: 18px 16px;
+            }
+            
+            .card-title {
+                font-size: 16px;
+                margin-bottom: 12px;
+                line-height: 1.3;
+            }
+            
+            .card-text {
+                font-size: 12px;
+                line-height: 1.4;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .header-text {
+                top: 35px;
+            }
+            
+            .header-text h1 {
+                font-size: 18px;
+            }
+            
+            .main-card {
+                top: 160px;
+                width: 240px;
+            }
+            
+            .food-image {
+                height: 100px;
+            }
+            
+            .card-content {
+                padding: 16px 14px;
+            }
+            
+            .card-title {
+                font-size: 15px;
+                margin-bottom: 10px;
+            }
+            
+            .card-text {
+                font-size: 11px;
+            }
+        }
+        </style>
+    <script>
+        // Redirección automática después de 5 segundos
+        setTimeout(function() {
+            window.location.href = 'resumen.html';
+        }, 5000); // 5000 milisegundos = 5 segundos
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- IMAGEN DE FONDO: Reemplaza el background-image en la clase .background-image -->
+        <div class="background-image"></div>
+        <div class="overlay"></div>
+        
+        <!-- TEXTO SUPERIOR -->
+        <div class="header-text">
+            <h1>Mientras buscamos tus vuelos <br> ¿sabías que...?</h1>
+        </div>
+        
+        <!-- TARJETA PRINCIPAL -->
+        <div class="main-card">
+            <!-- IMAGEN DEL CENTRO: Reemplaza el background-image en la clase .food-image -->
+            <div class="food-image"></div>
+            
+            <!-- CONTENIDO -->
+            <div class="card-content">
+                <h2 class="card-title">Ofrecemos el mejor servicio de comida a bordo en Europa</h2>
+                <p class="card-text">Hemos sido galardonados en los <span class="highlight">PAX International Awards</span> gracias a nuestro compromiso con la cocina española y la alta calidad de nuestros productos.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

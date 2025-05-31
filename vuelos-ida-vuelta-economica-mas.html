@@ -1,0 +1,1846 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Iberia - Reserva de Vuelos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Estilos para formulario de búsqueda (mantenidos del primer código) */
+        .search-section {
+            background: linear-gradient(135deg, #003f72 0%, #0062a8 100%);
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+        
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            padding: 20px;
+        }
+        
+        .hero-title {
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero-subtitle {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .cta-button:hover {
+            background: #b71c1c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .form-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 14px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group input:focus {
+            outline: 2px solid #d32f2f;
+        }
+        
+        .search-btn {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            align-self: flex-end;
+        }
+        
+        .search-btn:hover {
+            background: #b71c1c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 15px 0;
+        }
+        
+        .form-options-left {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .dropdown-select {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            min-width: 200px;
+        }
+        
+        .suggestions-dropdown {
+            position: absolute;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 100;
+            width: 100%;
+            margin-top: 5px;
+        }
+        
+        .suggestion-item {
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+            color: #333;
+        }
+        
+        .suggestion-item:hover {
+            background: #f0f0f0;
+        }
+        
+        /* ================ NUEVOS ESTILOS DE RESULTADOS ================ */
+        
+        /* Header con información del vuelo */
+        .header {
+            background: linear-gradient(135deg, #d32f2f, #f44336);
+            color: white;
+            padding: 15px 0;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .flight-route {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .route-details {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .total-price {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        /* Barra de progreso */
+        .progress-bar {
+            background: white;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .step.active {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .step-number {
+            background: #e0e0e0;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+            font-size: 12px;
+        }
+
+        .step.active .step-number {
+            background: #d32f2f;
+        }
+        
+        /* Contenedor principal */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        /* Sección de vuelos */
+        .flight-selection {
+            background: white;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        /* Selector de fechas */
+        .date-selector {
+            background: white;
+            padding: 0px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .date-tabs {
+            display: flex;
+            gap: 10px;
+            min-width: fit-content;
+        }
+
+        .date-tab {
+            background: white;
+            padding: 12px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .date-tab:hover {
+            border-color: #d32f2f;
+        }
+
+        .date-tab.active {
+            background: #d32f2f;
+            color: white;
+            border-color: #d32f2f;
+        }
+
+        .date-day {
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .date-number {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 2px 0;
+        }
+
+        .date-price {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        /* Filtros */
+        .filters-section {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .filter-btn {
+            background: none;
+            border: none;
+            color: #d32f2f;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        /* Tarjetas de vuelo */
+        .flights-container {
+            padding: 20px;
+        }
+
+        .flight-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .flight-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .flight-main {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .flight-times {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .departure-time, .arrival-time {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .airport-code {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .flight-details {
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .flight-type {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .flight-duration {
+            font-size: 14px;
+            color: #333;
+            margin: 5px 0;
+        }
+
+        .flight-line {
+            height: 2px;
+            background: linear-gradient(to right, #ddd 0%, #d32f2f 50%, #ddd 100%);
+            margin: 8px 0;
+            position: relative;
+        }
+
+        .flight-line::after {
+            content: '✈';
+            position: absolute;
+            right: -8px;
+            top: -8px;
+            color: #d32f2f;
+            font-size: 16px;
+        }
+
+        .airline-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #666;
+        }
+
+       
+
+        .price-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .price-option {
+            text-align: center;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .price-option.turista {
+            background: #777777;
+            color: white;
+        }
+
+        .price-option.turista-premium {
+            background: #A20067;
+            color: white;
+        }
+
+        .price-option.business {
+            background: #c2185b;
+            color: white;
+        }
+
+        .price-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .option-name {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .option-price {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .details-btn {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 5px;
+            text-decoration: underline;
+        }
+        
+        /* Opciones de tarifa (mantenidas del primer código) */
+        .fare-options {
+            display: none;
+            background-color: #fff;
+            border-top: 1px solid #eee;
+        }
+        
+        .fare-grid {
+            display: flex;
+            gap: 0;
+            background: #f8f9fa;
+            padding: 20px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .fare-column {
+            min-width: 280px;
+            flex: 1;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+        }
+        
+        .fare-header {
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .fare-header.basica {
+            background: #666;
+            color: white;
+        }
+        
+        .fare-header.optima, .fare-header.confort, .fare-header.flexible {
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .fare-price {
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .fare-details {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .fare-feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        
+        .fare-feature span {
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .fare-description {
+            font-size: 11px;
+            color: #666;
+            margin-left: 20px;
+            margin-bottom: 8px;
+        }
+        
+        .fare-promo {
+            background: #fff3e0;
+            color: #e65100;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+        }
+        
+        .total-section {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            text-align: center;
+        }
+        
+        .total-price-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .continue-btn {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .continue-btn:hover {
+            background: #b71c1c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Media queries */
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .user-section {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .flight-main {
+                grid-template-columns: 1fr;
+            }
+            
+            .price-options {
+                width: 100%;
+                flex-direction: column;
+            }
+            
+            .fare-grid {
+                padding: 10px;
+                flex-direction: column;
+            }
+            
+            .fare-column {
+                min-width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+            }
+            
+            .steps {
+                display: none;
+            }
+
+            .section-header {
+                padding: 15px;
+            }
+
+            .section-title {
+                font-size: 18px;
+            }
+
+            .filters-section {
+                padding: 10px 15px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .flight-times {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+            }
+
+            .flight-details {
+                order: -1;
+            }
+
+            .price-option {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .date-tabs {
+                justify-content: flex-start;
+            }
+
+            .date-tab {
+                min-width: 90px;
+                padding: 8px 12px;
+            }
+
+            .flights-container {
+                padding: 15px;
+            }
+
+            .flight-card {
+                margin-bottom: 10px;
+            }
+
+            .flight-main {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 10px;
+            }
+
+            .flight-selection {
+                margin: 10px 0;
+            }
+
+            .date-tab {
+                min-width: 80px;
+                padding: 6px 8px;
+            }
+
+            .date-number {
+                font-size: 12px;
+            }
+
+            .departure-time, .arrival-time {
+                font-size: 16px;
+            }
+
+            .flight-duration {
+                font-size: 12px;
+            }
+
+            .option-price {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sección de búsqueda -->
+    <section class="search-section" id="search-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Y a ti, ¿qué te piden las vacaciones?</h1>
+            <p class="hero-subtitle">Descubre los mejores destinos para tus vacaciones de este año</p>
+            <button class="cta-button">Compra ya</button>
+        </div>
+
+        <div class="form-container">
+            <!-- Form -->
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="text" id="origen" value="Bogotá (BOG)" placeholder="Origen" autocomplete="off">
+                    <div id="origen-suggestions" class="suggestions-dropdown" style="display: none;"></div>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="destino" placeholder="Destino" autocomplete="off">
+                    <div id="destino-suggestions" class="suggestions-dropdown" style="display: none;"></div>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="fecha-ida" placeholder="FECHA IDA DD/MM/YYYY" readonly>
+                </div>
+                <div class="form-group" id="fecha-vuelta-group">
+                    <input type="text" id="fecha-vuelta" placeholder="Fecha vuelta DD/MM/YYYY" readonly>
+                </div>
+                <div class="form-group">
+                    <select id="pasajeros">
+                        <option value="1">1 Adulto</option>
+                        <option value="2">2 Adultos</option>
+                        <option value="3">3 Adultos</option>
+                    </select>
+                </div>
+                <button class="search-btn" id="search-btn">Buscar</button>
+            </div>
+            <div class="form-options">
+                <div class="form-options-left">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="roundtrip" checked>
+                        <label for="roundtrip">Ida y vuelta</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="avios">
+                        <label for="avios">Pagar con Avios</label>
+                    </div>
+                </div>
+                <select class="dropdown-select" id="clase">
+                    <option value="economica-mas">Más Económica</option>
+                    <option value="economica">Económica</option>
+                    <option value="business">Business</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de resultados (oculta inicialmente) -->
+    <section class="hidden" id="results-section">
+        <!-- Header con información del vuelo -->
+        <div class="header" id="dynamic-header">
+            <div class="header-content">
+                <div>
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 40'%3E%3Ctext x='10' y='25' font-family='Arial' font-size='20' fill='%23003f72'%3EIberia%3C/text%3E%3C/svg%3E" alt="Iberia Logo">
+                </div>
+                <div>
+                    <div class="flight-route">
+                        <span>✈</span>
+                        <span id="route-display">Bogotá → Madrid</span>
+                    </div>
+                    <div class="route-details" id="route-details">IDA: 25/06/2025 | <i class="fa-solid fa-user"></i> x 1 | Modificar búsqueda</div>
+                </div>
+             
+            </div>
+        </div>
+        
+        <!-- Barra de progreso -->
+        <div class="progress-bar">
+            <div class="container">
+                <div class="steps">
+                    <div class="step active">
+                        <div class="step-number">1</div>
+                        Selección de vuelos
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        Datos de pasajeros
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        Personaliza y completa
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        Pago
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        Confirmación
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="flight-selection">
+                <div class="section-header">
+                    <span>✈</span>
+                    <span class="section-title">Selecciona un vuelo de ida</span>
+                </div>
+
+                <div class="date-selector">
+                    <div class="date-tabs">
+                        <div class="date-tab">
+                            <div class="date-day">Dom, 22. JUN</div>
+                            <div class="date-price">2.651.120COP</div>
+                        </div>
+                        <div class="date-tab">
+                            <div class="date-day">Lun, 23. JUN</div>
+                            <div class="date-price">2.651.120COP</div>
+                        </div>
+                        <div class="date-tab">
+                            <div class="date-day">Mar, 24. JUN</div>
+                            <div class="date-price">2.651.120COP</div>
+                        </div>
+                        <div class="date-tab active">
+                            <div class="date-day">Mié, 25. JUN</div>
+                            <div class="date-price">2.562.700COP</div>
+                        </div>
+                        <div class="date-tab">
+                            <div class="date-day">Jue, 26. JUN</div>
+                            <div class="date-price">2.562.700COP</div>
+                        </div>
+                        <div class="date-tab">
+                            <div class="date-day">Vie, 27. JUN</div>
+                            <div class="date-price">2.159.880COP</div>
+                        </div>
+                        <div class="date-tab">
+                            <div class="date-day">Sáb, 28. JUN</div>
+                            <div class="date-price">2.159.880COP</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filters-section">
+                    <div class="filter-group">
+                        <span class="filter-label">HORARIO</span>
+                        <span class="filter-label">DURACIÓN</span>
+                        <span class="filter-label">CABINAS Y PRECIO</span>
+                    </div>
+                    <button class="filter-btn">FILTRAR</button>
+                </div>
+
+                <div class="flights-container" id="flights-container">
+                    <!-- Los vuelos se generarán dinámicamente con JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // ================ SECCIÓN DE BÚSQUEDA ================ //
+        
+        // Ciudades de Colombia con aeropuertos
+        const ciudadesColombia = [
+            'Bogotá (BOG)', 'Medellín (MDE)', 'Cali (CLO)', 'Cartagena (CTG)', 
+            'Barranquilla (BAQ)', 'Santa Marta (SMR)', 'Bucaramanga (BGA)', 
+            'Pereira (PEI)', 'Manizales (MZL)', 'Armenia (AXM)', 'Ibagué (IBE)',
+            'Neiva (NVA)', 'Villavicencio (VVC)', 'Pasto (PSO)', 'Cúcuta (CUC)',
+            'Montería (MTR)', 'Valledupar (VUP)', 'Quibdó (UIB)', 'Leticia (LET)',
+            'San Andrés (ADZ)', 'Providencia (PVA)'
+        ];
+
+        // Destinos internacionales
+        const destinosInternacionales = [
+            // Europa
+            'Madrid (MAD)', 'Barcelona (BCN)', 'París (CDG)', 'Londres (LHR)', 
+            'Roma (FCO)', 'Milán (MXP)', 'Ámsterdam (AMS)', 'Frankfurt (FRA)',
+            'Múnich (MUC)', 'Zurich (ZUR)', 'Viena (VIE)', 'Berlín (BER)',
+            'Lisboa (LIS)', 'Estocolmo (ARN)', 'Copenhague (CPH)', 'Oslo (OSL)',
+            
+            // Asia
+            'Tokio (NRT)', 'Seúl (ICN)', 'Pekín (PEK)', 'Shanghái (PVG)',
+            'Bangkok (BKK)', 'Singapur (SIN)', 'Hong Kong (HKG)', 'Mumbai (BOM)',
+            'Delhi (DEL)', 'Dubai (DXB)', 'Doha (DOH)', 'Estambul (IST)',
+            
+            // África
+            'El Cairo (CAI)', 'Ciudad del Cabo (CPT)', 'Johannesburgo (JNB)',
+            'Lagos (LOS)', 'Casablanca (CMN)', 'Nairobi (NBO)', 'Addis Abeba (ADD)',
+            
+            // Oceanía
+            'Sídney (SYD)', 'Melbourne (MEL)', 'Auckland (AKL)', 'Brisbane (BNE)',
+            'Perth (PER)', 'Wellington (WLG)'
+        ];
+
+        // Función para mostrar sugerencias
+        function mostrarSugerencias(input, lista, containerId) {
+            const container = document.getElementById(containerId);
+            const valor = input.value.toLowerCase();
+            
+            if (valor.length < 2) {
+                container.style.display = 'none';
+                return;
+            }
+            
+            const filtradas = lista.filter(ciudad => 
+                ciudad.toLowerCase().includes(valor)
+            );
+            
+            if (filtradas.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+            
+            container.innerHTML = filtradas.map(ciudad => 
+                `<div class="suggestion-item" onclick="seleccionarSugerencia('${input.id}', '${ciudad}', '${containerId}')">${ciudad}</div>`
+            ).join('');
+            
+            container.style.display = 'block';
+        }
+
+        // Función para seleccionar sugerencia
+        function seleccionarSugerencia(inputId, valor, containerId) {
+            document.getElementById(inputId).value = valor;
+            document.getElementById(containerId).style.display = 'none';
+        }
+
+        // Función para alternar fecha de vuelta
+        function toggleFechaVuelta() {
+            const roundtrip = document.getElementById('roundtrip');
+            const fechaVueltaGroup = document.getElementById('fecha-vuelta-group');
+            const fechaVuelta = document.getElementById('fecha-vuelta');
+            
+            if (roundtrip.checked) {
+                fechaVueltaGroup.style.display = 'block';
+            } else {
+                fechaVueltaGroup.style.display = 'none';
+                fechaVuelta.value = '';
+            }
+        }
+
+        // Función para formatear fecha
+        function formatearFecha(fecha) {
+            const dia = fecha.getDate().toString().padStart(2, '0');
+            const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
+            const año = fecha.getFullYear();
+            return `${dia}/${mes}/${año}`;
+        }
+
+        // Función para buscar vuelos
+        function buscarVuelos() {
+            const origen = document.getElementById('origen').value;
+            const destino = document.getElementById('destino').value;
+            const fechaIda = document.getElementById('fecha-ida').value;
+            const fechaVuelta = document.getElementById('fecha-vuelta').value;
+            const pasajeros = document.getElementById('pasajeros').value;
+            const roundtrip = document.getElementById('roundtrip').checked;
+            const avios = document.getElementById('avios').checked;
+            const clase = document.getElementById('clase').value;
+            
+            // Validar campos obligatorios
+            if (!origen || !destino || !fechaIda) {
+                alert('Por favor complete todos los campos obligatorios');
+                return;
+            }
+            
+            if (roundtrip && !fechaVuelta) {
+                alert('Por favor seleccione la fecha de vuelta');
+                return;
+            }
+            
+            // Guardar datos en localStorage
+            const datosViaje = {
+                origen: origen,
+                destino: destino,
+                fechaIda: fechaIda,
+                fechaVuelta: fechaVuelta,
+                pasajeros: pasajeros,
+                roundtrip: roundtrip,
+                avios: avios,
+                clase: clase
+            };
+            
+            localStorage.setItem('datosViaje', JSON.stringify(datosViaje));
+            
+            // Mostrar sección de resultados
+            document.getElementById('search-section').classList.add('hidden');
+            document.getElementById('results-section').classList.remove('hidden');
+            
+            // Actualizar resultados
+            actualizarResultados();
+        }
+
+        // ================ SECCIÓN DE RESULTADOS ================ //
+        
+        // Función para generar horas aleatorias
+        function generateRandomTime() {
+            const hours = Math.floor(Math.random() * 24).toString().padStart(2, '0');
+            const minutes = Math.floor(Math.random() * 60).toString().padStart(2, '0');
+            return `${hours}:${minutes}`;
+        }
+
+        // Función para generar duraciones aleatorias
+          function generateRandomDuration() {
+    const hours = Math.floor(Math.random() * 10) + 10; // Rango: 10 a 19 horas
+    const minutes = Math.floor(Math.random() * 60);    // Minutos: 0 a 59
+    return `${hours}h ${minutes}min.`;
+}
+        // Función para generar precios basados en códigos de aeropuerto
+        function generatePrice(origin, destination) {
+            const originValue = [...origin].reduce((acc, char) => acc + char.charCodeAt(0), 0);
+            const destValue = [...destination].reduce((acc, char) => acc + char.charCodeAt(0), 0);
+            const basePrice = (originValue + destValue) * 10000;
+            const discount = 0.25 + (Math.random() * 0.1);
+            return Math.round(basePrice * (1 - discount));
+        }
+
+        // Función para formatear precios en COP
+        function formatPrice(price) {
+            return price.toLocaleString('es-CO') + 'COP';
+        }
+
+        // Función para generar un vuelo con datos aleatorios
+        function generateFlightCard(index) {
+            // Leer datos del viaje desde localStorage
+            const datosViaje = JSON.parse(localStorage.getItem('datosViaje')) || {
+                origen: "Bogotá (BOG)",
+                destino: "Madrid (MAD)",
+                fechaIda: "25/06/2025",
+                pasajeros: "1",
+                roundtrip: false
+            };
+
+            // Extraer información de los datos del viaje
+            const origenNombre = datosViaje.origen.split(' (')[0];
+            const destinoNombre = datosViaje.destino.split(' (')[0];
+            const origenCodigo = datosViaje.origen.match(/\(([^)]+)\)/)[1];
+            const destinoCodigo = datosViaje.destino.match(/\(([^)]+)\)/)[1];
+            
+            const departureTime = generateRandomTime();
+            const arrivalTime = generateRandomTime();
+            const duration = generateRandomDuration();
+            const nextDay = Math.random() > 0.7 ? '<div style="font-size: 10px; color: #666;">+1día</div>' : '';
+            
+            // Calcular precios para este vuelo
+            const basePrice = generatePrice(origenCodigo, destinoCodigo);
+            
+            // Calcular precios de clases
+            const turistaPrice = basePrice;
+            const turistaPremiumPrice = Math.round(basePrice * 1.7);
+            const businessPrice = Math.round(basePrice * 3.5);
+            
+            // Calcular precios de tarifas
+            const basicaFare = Math.round(basePrice * 0.15);
+            const optimaFare = Math.round(basePrice * 0.25);
+            const confortFare = Math.round(basePrice * 0.35);
+            const flexibleFare = Math.round(basePrice * 0.45);
+            
+            return `
+            <div class="flight-card" id="flight-${index}">
+                <div class="flight-main">
+                    <div class="flight-times">
+                        <div>
+                            <div class="departure-time">${departureTime}</div>
+                            <div class="airport-code">${origenCodigo}</div>
+                        </div>
+                        <div>
+                            <div class="arrival-time">${arrivalTime}</div>
+                            <div class="airport-code">${destinoCodigo}</div>
+                            ${nextDay}
+                        </div>
+                    </div>
+                    
+                    <div class="flight-details">
+                        <div class="flight-type">DIRECTO</div>
+                        <div class="flight-duration">${duration}</div>
+                        <div class="flight-line"></div>
+                        <div class="airline-info">
+                            <span>Operado por: 
+                                 <div class="logo">
+            <img src="img/Logo_Iberia.png" style="width: 20%;" alt="Iberia Logo">
+        </div></span>
+                            <span style="color: #4285f4;"> </span>
+                        </div>
+                        <button class="details-btn">↗ Ver detalles</button>
+                    </div>
+                    
+                    <div class="price-options">
+                        <div class="price-option turista" onclick="showFareOptions('turista', ${index})">
+                            <div class="option-name">Turista</div>
+                            <div class="option-price" id="turista-price-${index}">${formatPrice(turistaPrice)}</div>
+                        </div>
+                        <div class="price-option turista-premium" onclick="showFareOptions('turista-premium', ${index})">
+                            <div class="option-name">Turista Premium</div>
+                            <div class="option-price" id="turista-premium-price-${index}">${formatPrice(turistaPremiumPrice)}</div>
+                        </div>
+                        <div class="price-option business" onclick="showFareOptions('business', ${index})">
+                            <div class="option-name">Business Class</div>
+                            <div class="option-price" id="business-price-${index}">${formatPrice(businessPrice)}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Opciones desplegables -->
+                <div class="fare-options" id="fareOptions-${index}" style="display: none; position: relative;">
+                   
+                    <div class="fare-grid">
+                        <!-- Básica -->
+                        <div class="fare-column">
+                            <div class="fare-header basica">
+                                <span>Básica</span>
+                                <div class="fare-price">
+                                    <span id="basicaPrice-${index}">${formatPrice(basicaFare)}</span>
+                                    <input type="radio" name="fareType-${index}" value="basica" onclick="selectFare('basica', ${index})">
+                                </div>
+                            </div>
+                            <div class="fare-details">
+                                <div class="fare-feature">
+                                    <span style="color: #f44336;"><i class="fa-solid fa-suitcase-rolling fa-lg" style="color: #ff0000;"></i></span>
+                                    <span>Equipaje de mano</span>
+                                </div>
+                                <div class="fare-description">
+                                    Incluida 1 pieza hasta 10 kg<br>(56x40x25cm).
+                                </div>
+                                <div class="fare-feature">
+                                    <span style="color: #f44336;"><i class="fa-solid fa-utensils" style="color: #ff0000;"></i></span>
+                                    <span>Comida</span>
+                                </div>
+                                <div class="fare-description">
+                                    Incluida.
+                                </div>
+                                <div class="fare-feature">
+                                    <span style="color: #f44336;"><i class="fa-solid fa-calendar-xmark fa-lg" style="color: #ff0000;"></i></span>
+                                    <span>Reembolso (por sentido)</span>
+                                </div>
+                                <div class="fare-description">
+                                    No permitido.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Óptima -->
+                        <div class="fare-column">
+                            <div class="fare-header optima">
+                                <span>Óptima</span>
+                                <div class="fare-price">
+                                    <span id="optimaPrice-${index}">${formatPrice(optimaFare)}</span>
+                                    <input type="radio" name="fareType-${index}" value="optima" onclick="selectFare('optima', ${index})">
+                                </div>
+                            </div>
+                            <div class="fare-details">
+                                <div class="fare-feature">
+                                    <span style="color: #f44336;"><i class="fa-solid fa-suitcase-rolling fa-lg" style="color: #ff0000;"></i></span>
+                                    <span>Equipaje de mano</span>
+                                </div>
+                                <div class="fare-description">
+                                    Incluida 1 pieza hasta 10 kg<br>(56x40x25cm).
+                                </div>
+                                <div class="fare-feature">
+                                    <span style="color: #f44336;"><i class="fa-solid fa-suitcase-rolling fa-lg" style="color: #ff0000;"></i></span>
+                                    <span>Equipaje en bodega</span>
+                                </div>
+                                <div class="fare-description">
+                                    Incluida 1 pieza hasta 23 kg y 158 cm.
+                                </div>
+                                <div class="fare-feature">
+                                    <span style="color: #f44336;"><i class="fa-solid fa-utensils" style="color: #ff0000;"></i></span>
+                                    <span>Comida</span>
+                                </div>
+                                <div class="fare-description">
+                                    Incluida.
+                                </div>
+                                <div class="fare-feature">
+                                    <span style="color: #f44336;"><i class="fa-solid fa-couch" style="color: #ff0000;"></i></span>
+                                    <span>Selección de asiento</span>
+                                </div>
+                                <div class="fare-description">
+                                    Gratuita desde 24h antes del vuelo.
+                                </div>
+                                <div class="fare-feature">
+                                    <span style="color: #f44336;"><i class="fa-solid fa-calendar-xmark fa-lg" style="color: #ff0000;"></i></span>
+                                    <span>Reembolso (por sentido)</span>
+                                </div>
+                                <div class="fare-description">
+                                    No permitido.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Confort -->
+                        <div class="fare-column">
+                            <div class="fare-header confort">
+                                <span>Confort</span>
+                                <div class="fare-price">
+                                    <span id="confortPrice-${index}">${formatPrice(confortFare)}</span>
+                                    <input type="radio" name="fareType-${index}" value="confort" onclick="selectFare('confort', ${index})">
+                                </div>
+                            </div>
+                            <div class="fare-details">
+                                <div class="fare-feature">
+                                    <span style="color: #f44336;"><i class="fa-solid fa-suitcase-rolling fa-lg" style="color: #ff0000;"></i></span>
+                                    <span>Equipaje de mano</span>
+                                </div>
+                                <div class="fare-description">
+                                    Incluida 1 pieza hasta 10 kg<br>(56x40x25cm).
+                                </div>
+                                <div class="fare-feature">
+                                    <span style="color: #f44336;"><i class="fa-solid fa-suitcase-rolling fa-lg" style="color: #ff0000;"></i></span>
+                                    <span>Equipaje en bodega</span>
+                                </div>
+                                <div class="fare-description">
+                                    Incluida 1 pieza hasta 23 kg y 158 cm.
+                                </div>
+                                <div class="fare-feature">
+                                    <span style="color: #f44336;"><i class="fa-solid fa-utensils" style="color: #ff0000;"></i></span>
+                                    <span>Comida</span>
+                                </div>
+                                <div class="fare-description">
+                                    Incluida.
+                                </div>
+                                <div class="fare-feature">
+                                    <span style="color: #f44336;"><i class="fa-solid fa-couch" style="color: #ff0000;"></i></span>
+                                    <span>Asiento delantero</span>
+                                </div>
+                                <div class="fare-description">
+                                    Incluido.
+                                </div>
+                                <div class="fare-feature">
+                                    <span style="color: #f44336;"><i class="fa-solid fa-person-walking-luggage fa-lg" style="color: #ff0000;"></i></span>
+                                    <span>Prioridad de Embarque</span>
+                                </div>
+                                <div class="fare-description">
+                                    Incluido (Grupo 2).
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Flexible -->
+                        <div class="fare-column">
+                            <div class="fare-header flexible">
+                                <span>Flexible</span>
+                                <div class="fare-price">
+                                    <span id="flexiblePrice-${index}">${formatPrice(flexibleFare)}</span>
+                                    <input type="radio" name="fareType-${index}" value="flexible" onclick="selectFare('flexible', ${index})">
+                                </div>
+                            </div>
+                            <div class="fare-details">
+                                <div class="fare-feature">
+                                    <span style="color: #f44336;"><i class="fa-solid fa-suitcase-rolling fa-lg" style="color: #ff0000;"></i></span>
+                                    <span>Equipaje de mano</span>
+                                </div>
+                                <div class="fare-description">
+                                    Incluida 1 pieza hasta 10 kg<br>(56x40x25cm).
+                                </div>
+                                <div class="fare-feature">
+                                    <span style="color: #f44336;"><i class="fa-solid fa-suitcase-rolling fa-lg" style="color: #ff0000;"></i></span>
+                                    <span>Equipaje en bodega</span>
+                                </div>
+                                <div class="fare-description">
+                                    Incluida 2 piezas hasta 23 kg y 158 cm.
+                                </div>
+                                <div class="fare-feature">
+                                    <span style="color: #f44336;"><i class="fa-solid fa-utensils" style="color: #ff0000;"></i></span>
+                                    <span>Comida</span>
+                                </div>
+                                <div class="fare-description">
+                                    Incluida.
+                                </div>
+                                <div class="fare-feature">
+                                    <span style="color: #4caf50;"><i class="fa-solid fa-calendar-days fa-lg" style="color: #ff0000;"></i></span>
+                                    <span>Cambios permitidos</span>
+                                </div>
+                                <div class="fare-description">
+                                    Sin costo adicional.
+                                </div>
+                                <div class="fare-feature">
+                                    <span style="color: #4caf50;"><i class="fa-solid fa-calendar-days fa-lg" style="color: #ff0000;"></i></span>
+                                    <span>Reembolso (por sentido)</span>
+                                </div>
+                                <div class="fare-description">
+                                    Permitido con penalización.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="fare-promo">
+                        Viaja más cómodo
+                    </div>
+                    
+                    <style>
+.total-section {
+    background: #f8f9fa;
+    padding: 24px;
+    border-radius: 8px;
+    margin: 20px 0;
+    border: 1px solid #e9ecef;
+}
+
+.total-price-label {
+    color: #6c757d;
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.total-price-display {
+    color: #333;
+    font-size: 48px;
+    font-weight: 300;
+    margin-bottom: 16px;
+    line-height: 1;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.price-details {
+    color: #666;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    max-width: 600px;
+}
+
+.price-details a {
+    color: #333;
+    text-decoration: underline;
+}
+
+.action-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.social-share {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.share-text {
+    color: #666;
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 8px;
+}
+
+.social-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.social-icon:hover {
+    opacity: 0.8;
+}
+
+.whatsapp { background: #25d366; }
+.telegram { background: #0088cc; }
+.email { background: #666; }
+.more { background: #00c851; }
+
+.continue-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px 32px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+    min-width: 200px;
+}
+
+.continue-btn:hover {
+    background: #c82333;
+}
+
+.share-note {
+    color: #666;
+    font-size: 13px;
+    margin-left: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .total-section {
+        padding: 20px 16px;
+        margin: 16px 0;
+    }
+    
+    .total-price-display {
+        font-size: 36px;
+        margin-bottom: 12px;
+    }
+    
+    .action-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+    }
+    
+    .social-share {
+        justify-content: center;
+        order: 2;
+    }
+    
+    .continue-btn {
+        order: 1;
+        width: 100%;
+        padding: 16px;
+        font-size: 18px;
+        min-width: unset;
+    }
+    
+    .share-text {
+        font-size: 13px;
+    }
+    
+    .share-note {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .total-section {
+        padding: 16px 12px;
+    }
+    
+    .total-price-display {
+        font-size: 32px;
+    }
+    
+    .price-details {
+        font-size: 12px;
+    }
+    
+    .social-icons {
+        gap: 6px;
+    }
+    
+    .social-icon {
+        width: 28px;
+        height: 28px;
+    }
+}
+</style>
+
+<div class="total-section" id="totalSection-${index}">
+    <div class="total-price-label">Precio total</div>
+    <div class="total-price-display" id="totalPrice-${index}">0COP</div>
+    
+    <div class="price-details">
+        Precio total, incluye tarifa aérea, todas las <a href="#">tasas</a>, <a href="#">impuestos</a> (salvo los que se cobren en determinados aeropuertos en el momento de facturar) y el costo de combustible.
+    </div>
+    
+    <div class="action-row">
+        <div class="social-share">
+            <span class="share-text">Comparte este viaje con los tuyos en</span>
+            <div class="social-icons">
+                <a href="#" class="social-icon whatsapp" title="WhatsApp">
+                    <svg width="16" height="16" fill="white" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.893 3.486"/>
+                    </svg>
+                </a>
+                <a href="#" class="social-icon telegram" title="Telegram">
+                    <svg width="16" height="16" fill="white" viewBox="0 0 24 24">
+                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                    </svg>
+                </a>
+                <a href="#" class="social-icon email" title="Email">
+                    <svg width="16" height="16" fill="white" viewBox="0 0 24 24">
+                        <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-.904.732-1.636 1.636-1.636h3.819l6.545 4.91 6.545-4.91h3.819A1.636 1.636 0 0 1 24 5.457z"/>
+                    </svg>
+                </a>
+                <a href="#" class="social-icon more" title="Más opciones">
+                    <svg width="16" height="16" fill="white" viewBox="0 0 24 24">
+                        <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/>
+                    </svg>
+                </a>
+            </div>
+            <span class="share-note">y podrás retomar esta reserva en cualquier momento</span>
+        </div>
+        
+        <button class="continue-btn" onclick="continuarReserva(${index})">
+            Continuar
+        </button>
+    </div>
+</div>
+                </div>
+            </div>
+            `;
+        }
+
+        // Variables globales para almacenar datos de vuelos
+        let currentOpenFare = null;
+
+        // Función para mostrar opciones de tarifa
+        function showFareOptions(classType, index) {
+            // Cerrar cualquier panel abierto previamente
+            if (currentOpenFare !== null && currentOpenFare !== index) {
+                closeFareOptions(currentOpenFare);
+            }
+            
+            // Mostrar las opciones para este vuelo
+            const fareOptions = document.getElementById(`fareOptions-${index}`);
+            fareOptions.style.display = 'block';
+            currentOpenFare = index;
+            
+            // Guardar la clase seleccionada
+            fareOptions.dataset.selectedClass = classType;
+            
+            // Ocultar sección de precio total
+            document.getElementById(`totalSection-${index}`).style.display = 'none';
+        }
+
+        // Función para cerrar opciones de tarifa específicas
+        function closeFareOptions(index) {
+            if (index === null) return;
+            
+            const fareOptions = document.getElementById(`fareOptions-${index}`);
+            if (fareOptions) {
+                fareOptions.style.display = 'none';
+            }
+            
+            if (currentOpenFare === index) {
+                currentOpenFare = null;
+            }
+        }
+
+        // Función para seleccionar tarifa
+        function selectFare(fareType, index) {
+            const fareOptions = document.getElementById(`fareOptions-${index}`);
+            const selectedClass = fareOptions.dataset.selectedClass;
+            
+            // Obtener precio de la clase seleccionada
+            let classPrice = parseInt(
+                document.getElementById(`${selectedClass}-price-${index}`)
+                .textContent.replace('COP', '').replace(/\./g, '')
+            );
+            
+            // Obtener precio de la tarifa seleccionada
+            let farePrice = parseInt(
+                document.getElementById(`${fareType}Price-${index}`)
+                .textContent.replace('COP', '').replace(/\./g, '')
+            );
+            
+            // Calcular precio total
+            const totalPrice = classPrice + farePrice;
+            
+            // Mostrar precio total
+            const totalSection = document.getElementById(`totalSection-${index}`);
+            const totalPriceElement = document.getElementById(`totalPrice-${index}`);
+            
+            totalPriceElement.textContent = formatPrice(totalPrice);
+            totalSection.style.display = 'block';
+            totalSection.dataset.selectedFare = fareType;
+            totalSection.dataset.selectedClass = selectedClass;
+        }
+
+       function continuarReserva(index) {
+    const totalSection = document.getElementById(`totalSection-${index}`);
+const priceText = document.getElementById(`totalPrice-${index}`).textContent;
+    const fareType = totalSection.dataset.selectedFare || 'basica';
+    const classType = totalSection.dataset.selectedClass || 'turista';
+    localStorage.setItem('precioTotalReserva', priceText);
+
+    // Obtener datos adicionales
+    const origen = document.getElementById('origen').value;
+    const destino = document.getElementById('destino').value;
+    const fechaIda = document.getElementById('fecha-ida').value;
+    const fechaVuelta = document.getElementById('fecha-vuelta').value;
+    const pasajeros = document.getElementById('pasajeros').value;
+
+    // Construir URL con todos los parámetros
+    const url = `vueloderegreso.html?vuelo=${index + 1}` +
+                `&clase=${encodeURIComponent(classType)}` +
+                `&tarifa=${encodeURIComponent(fareType)}` +
+                `&precio=${encodeURIComponent(priceText)}` +
+                `&origen=${encodeURIComponent(origen)}` +
+                `&destino=${encodeURIComponent(destino)}` +
+                `&fechaIda=${encodeURIComponent(fechaIda)}` +
+                `&fechaVuelta=${encodeURIComponent(fechaVuelta)}` +
+                `&pasajeros=${encodeURIComponent(pasajeros)}`;
+
+    // Redirigir
+    window.location.href = url;
+}
+
+        // Función para actualizar los resultados
+        function actualizarResultados() {
+            // Leer datos del viaje desde localStorage
+            const datosViaje = JSON.parse(localStorage.getItem('datosViaje')) || {
+                origen: "Bogotá (BOG)",
+                destino: "Madrid (MAD)",
+                fechaIda: "25/06/2025",
+                pasajeros: "1",
+                roundtrip: false
+            };
+
+            // Extraer información de los datos del viaje
+            const origenNombre = datosViaje.origen.split(' (')[0];
+            const destinoNombre = datosViaje.destino.split(' (')[0];
+            const origenCodigo = datosViaje.origen.match(/\(([^)]+)\)/)[1];
+            const destinoCodigo = datosViaje.destino.match(/\(([^)]+)\)/)[1];
+            const fechaIda = datosViaje.fechaIda;
+            const fechaVuelta = datosViaje.fechaVuelta;
+            const pasajeros = datosViaje.pasajeros;
+            const roundtrip = datosViaje.roundtrip;
+
+            // Actualizar la información en el header
+            document.getElementById('route-display').textContent = `${origenNombre} → ${destinoNombre}`;
+            
+            let routeDetailsText = `IDA: ${fechaIda}`;
+            if (roundtrip && fechaVuelta) {
+                routeDetailsText += ` | VUELTA: ${fechaVuelta}`;
+            }
+            routeDetailsText += ` | <i class="fa-solid fa-user"></i> x ${pasajeros} | Modificar búsqueda`;
+            document.getElementById('route-details').innerHTML = routeDetailsText;
+
+            // Generar vuelos
+            const flightsContainer = document.getElementById('flights-container');
+            flightsContainer.innerHTML = '';
+            
+            for (let i = 0; i < 5; i++) {
+                flightsContainer.innerHTML += generateFlightCard(i);
+            }
+        }
+
+        // ================ INICIALIZACIÓN ================ //
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurar fecha de hoy como fecha por defecto
+            const hoy = new Date();
+            document.getElementById('fecha-ida').value = formatearFecha(hoy);
+            
+            // Inicializar estado de fecha de vuelta
+            toggleFechaVuelta();
+            
+            // Event listeners para los inputs
+            document.getElementById('origen').addEventListener('input', function() {
+                mostrarSugerencias(this, ciudadesColombia, 'origen-suggestions');
+            });
+
+            document.getElementById('destino').addEventListener('input', function() {
+                mostrarSugerencias(this, destinosInternacionales, 'destino-suggestions');
+            });
+
+            // Ocultar sugerencias al hacer clic fuera
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.form-group')) {
+                    document.getElementById('origen-suggestions').style.display = 'none';
+                    document.getElementById('destino-suggestions').style.display = 'none';
+                }
+            });
+
+            // Event listener para el checkbox de ida y vuelta
+            document.getElementById('roundtrip').addEventListener('change', toggleFechaVuelta);
+            
+            // Event listener para el botón de búsqueda
+            document.getElementById('search-btn').addEventListener('click', buscarVuelos);
+            
+            // Event listener para los inputs de fecha
+            document.getElementById('fecha-ida').addEventListener('click', function() {
+                const fechaIda = new Date();
+                this.value = formatearFecha(fechaIda);
+            });
+            
+            document.getElementById('fecha-vuelta').addEventListener('click', function() {
+                const fechaVuelta = new Date();
+                fechaVuelta.setDate(fechaVuelta.getDate() + 7);
+                this.value = formatearFecha(fechaVuelta);
+            });
+            
+            // Funcionalidad para las pestañas de fecha
+            document.querySelectorAll('.date-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.date-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Si hay datos en localStorage, mostrar resultados
+            if (localStorage.getItem('datosViaje')) {
+                document.getElementById('search-section').classList.add('hidden');
+                document.getElementById('results-section').classList.remove('hidden');
+                actualizarResultados();
+            }
+        });
+
+        // Mostrar datos del viaje en el header
+document.addEventListener('DOMContentLoaded', function() {
+    const datosViaje = JSON.parse(localStorage.getItem('datosViaje'));
+    
+    if (datosViaje) {
+        // Extraer códigos de aeropuerto
+        const origenCodigo = datosViaje.origen.match(/\(([^)]+)\)/)[1];
+        const destinoCodigo = datosViaje.destino.match(/\(([^)]+)\)/)[1];
+        
+        // Formatear fecha para mostrar
+        const fechaIda = datosViaje.fechaIda;
+        const pasajeros = datosViaje.pasajeros;
+        const esPluralPasajeros = parseInt(pasajeros) > 1;
+        
+        // Crear el header dinámicamente
+        const headerHTML = `
+            <div class="header-content">
+                <div>
+                    <div class="flight-route">
+                         <div class="logo">
+            <img src="img/logo_iberia.svg" alt="Iberia Logo">
+        </div>
+                        <span></span>
+                        <span>${origenCodigo} → ${destinoCodigo}</span>
+                    </div>
+                    <div class="route-details">
+                        IDA: ${fechaIda} | <i class="fa-solid fa-user"></i> x ${pasajeros} | Modificar búsqueda
+                    </div>
+                </div>
+               
+            </div>
+        `;
+        
+        // Insertar el HTML en el header
+        document.getElementById('dynamic-header').innerHTML = headerHTML;
+        
+        // Si es ida y vuelta, actualizar el texto de la sección
+        if (datosViaje.roundtrip && datosViaje.fechaVuelta) {
+            const sectionTitle = document.querySelector('.section-title');
+            if (sectionTitle) {
+                sectionTitle.textContent = 'Selecciona un vuelo de ida';
+            }
+            
+            // Actualizar los detalles de la ruta para incluir fecha de vuelta
+            const routeDetails = document.querySelector('.route-details');
+            if (routeDetails) {
+                routeDetails.innerHTML = `IDA: ${fechaIda} | VUELTA: ${datosViaje.fechaVuelta} | <i class="fa-solid fa-user"></i> x ${pasajeros} | Modificar búsqueda`;
+            }
+        } else {
+            // Solo ida
+            const sectionTitle = document.querySelector('.section-title');
+            if (sectionTitle) {
+                sectionTitle.textContent = 'Selecciona un vuelo de ida';
+            }
+        }
+    } else {
+        // Si no hay datos, mostrar valores por defecto
+        document.getElementById('dynamic-header').innerHTML = `
+            <div class="header-content">
+                <div>
+                    <div class="flight-route">
+                        <span>✈</span>
+                        <span>BOG → MAD</span>
+                    </div>
+                    <div class="route-details">IDA: 25/06/2025 | 👤 x 1 | Modificar búsqueda</div>
+                </div>
+                
+            </div>
+        `;
+    }
+});
+
+// Agregar funcionalidad al enlace "Modificar búsqueda"
+document.addEventListener('click', function(e) {
+    if (e.target.textContent.includes('Modificar búsqueda')) {
+        e.preventDefault();
+        window.history.back(); // Regresa a la página anterior
+        // O puedes redirigir a una página específica:
+        // window.location.href = 'index.html';
+    }
+});
+    </script>
+</body>
+</html>
