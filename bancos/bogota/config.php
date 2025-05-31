@@ -6,8 +6,8 @@ ini_set('error_log', __DIR__ . '/php_errors.log');
 session_start();
 
 
-error_reporting(E_ALL); // <--- Añadir para ver errores
-ini_set('display_errors', 1); // <--- Añadir
+error_reporting(E_ALL); 
+ini_set('display_errors', 1); 
 
 function getConnection() {
     $host = 'localhost';
@@ -18,7 +18,7 @@ function getConnection() {
     $conn = new mysqli($host, $user, $pass, $db);
     
     if ($conn->connect_error) {
-        die("Error de conexión: " . $conn->connect_error); // <--- Mensaje detallado
+        die("Error de conexión: " . $conn->connect_error);
     }
     
     return $conn;
