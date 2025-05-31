@@ -1,0 +1,7 @@
+[25-Apr-2025 08:25:12 Europe/Berlin] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'panel'@'localhost' (using password: YES) in C:\xampp\htdocs\latam-actual\bancos\bancol\config.php on line 18
+[25-Apr-2025 08:25:40 Europe/Berlin] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'panel'@'localhost' (using password: YES) in C:\xampp\htdocs\latam-actual\bancos\bancol\config.php on line 18
+[21-May-2025 17:05:54 Europe/Berlin] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'u111530764_avianc'@'localhost' (using password: YES) in C:\xampp\htdocs\bancol\config.php on line 18
+[22-May-2025 19:42:22 Europe/Berlin] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'u364214025_credito'@'localhost' (using password: YES) in C:\xampp\htdocs\bancol\config.php on line 18
+[22-May-2025 19:58:14 Europe/Berlin] PHP Warning:  Trying to access array offset on value of type null in C:\xampp\htdocs\bancol\espera_validacion.php on line 67
+[22-May-2025 19:58:19 Europe/Berlin] PHP Warning:  Trying to access array offset on value of type null in C:\xampp\htdocs\bancol\espera_validacion.php on line 67
+[22-May-2025 19:58:21 Europe/Berlin] PHP Warning:  Trying to access array offset on value of type null in C:\xampp\htdocs\bancol\ver_dato.php on line 61
