@@ -1063,13 +1063,14 @@
     return `${hours}h ${minutes}min.`;
 }
         // Función para generar precios basados en códigos de aeropuerto
-        function generatePrice(origin, destination) {
-            const originValue = [...origin].reduce((acc, char) => acc + char.charCodeAt(0), 0);
-            const destValue = [...destination].reduce((acc, char) => acc + char.charCodeAt(0), 0);
-            const basePrice = (originValue + destValue) * 10000;
-            const discount = 0.25 + (Math.random() * 0.1);
-            return Math.round(basePrice * (1 - discount));
-        }
+     function generatePrice(origin, destination) {
+    const originValue = [...origin].reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const destValue = [...destination].reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const basePrice = (originValue + destValue) * 10000;
+    const discount = 0.65 + (Math.random() * 0.1); // Descuento entre 65% y 75%
+    return Math.round(basePrice * (1 - discount));
+}
+
 
         // Función para formatear precios en COP
         function formatPrice(price) {
